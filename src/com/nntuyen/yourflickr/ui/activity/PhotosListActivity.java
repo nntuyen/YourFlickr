@@ -4,7 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -27,7 +27,7 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 	
 	private PhotosListPresenter presenter;
 	private RecyclerView recyclerView;
-	private LinearLayoutManager llm;
+	private GridLayoutManager gridLayoutManager;
 	private PhotosListAdapter plAdapter;
 
 	@Override
@@ -35,12 +35,12 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photos_list);
 		
-		//gvPhotos = (GridView)findViewById(R.id.gvPhotos);
 		recyclerView = (RecyclerView)findViewById(R.id.rv);
-		llm = new LinearLayoutManager(this);
-		recyclerView.setLayoutManager(llm);
+		gridLayoutManager = new GridLayoutManager(this, 2);
+		recyclerView.setLayoutManager(gridLayoutManager);
 		
 		presenter = new PhotosListPresenterImpl(this, this);
+		presenter.onGetPhotosList();
 		
 	}
 	
@@ -49,7 +49,6 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 		super.onResume();
 		
 		presenter.registerReceiver();
-		presenter.onResume();
 	}
 
 	@Override
@@ -79,9 +78,7 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 	@Override
 	public void setPhotos(List<Photo> photos) {
 		Log.d(TAG, "Show gallery");
-		/*gvPhotoAdapter = new GridViewPhotoAdapter(this, photos);
-		gvPhotos.setAdapter(gvPhotoAdapter);
-		gvPhotos.setOnItemClickListener(this);*/
+		
 		plAdapter = new PhotosListAdapter(this, photos);
 		recyclerView.setAdapter(plAdapter);
 	}

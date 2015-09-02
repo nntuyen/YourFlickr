@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.nntuyen.yourflickr.app.constant.BroadcastCallbackConst;
 import com.nntuyen.yourflickr.app.constant.FlickrApiConst;
@@ -76,9 +77,10 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		if (msg.equalsIgnoreCase(FlickrApiConst.GET_FROB_SUCCESS_MSG)) {
 			
 		} else if (msg.equalsIgnoreCase(FlickrApiConst.GET_TOKEN_SUCCESS_MSG)) {
-			String username = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_USERNAME);
-			photoUploaderView.showUser(username);
+			photoUploaderView.showUser(ObservableObject.getInstance().getUsername());
 			photoUploaderView.hideProgress();
+			
+			Toast.makeText(context, "Login successfully", Toast.LENGTH_LONG).show();
 		} else {
 			photoUploaderView.showMessage(msg);
 		}
@@ -93,6 +95,24 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 				photoUploaderView.showProgress();
 				FlickrHelper.getInstance().getToken(context);
 			}
+		}
+		
+		if (ObservableObject.getInstance().isAuthenticated()) {
+			photoUploaderView.showUser(ObservableObject.getInstance().getUsername());
+		}
+	}
+
+	@Override
+	public void onCreated() {
+		String username = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_USERNAME);
+		ObservableObject.getInstance().setUsername(username);
+		
+		if (username != null && !username.isEmpty()) {
+			ObservableObject.getInstance().setAuthenticated(true);
+			photoUploaderView.changeLoginButtonText("Log out");
+		} else {
+			ObservableObject.getInstance().setAuthenticated(false);
+			photoUploaderView.changeLoginButtonText("Login");
 		}
 	}
 

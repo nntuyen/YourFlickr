@@ -7,4 +7,5 @@ public interface PhotoUploaderPresenter {
 	public void login();
 	public void registerReceiver();
 	public void onResume(Bundle bundle);
+	public void onCreated();
 }

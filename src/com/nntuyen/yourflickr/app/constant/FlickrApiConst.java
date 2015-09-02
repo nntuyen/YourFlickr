@@ -11,6 +11,7 @@ public class FlickrApiConst {
 	public static final String BASE_URL = "http://flickr.com/services/rest/?";
 	public static final String AUTH_URL = "http://flickr.com/services/auth/?";
 	public static final String AUTH_PATH = "https://www.flickr.com/services/auth/"; // Use for getting back to previous activity
+	public static final String UPLOAD_URL = "https://up.flickr.com/services/upload/";
 	
 	public static final String METHOD_PARAM = "method";
 	public static final String GET_FROB_METHOD_VALUE = "flickr.auth.getFrob";

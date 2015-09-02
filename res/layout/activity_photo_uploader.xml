@@ -5,10 +5,19 @@
     android:orientation="vertical"
     tools:context="com.nntuyen.yourflickr.ui.activity.PhotoUploaderActivity" >
 
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_gravity="center_horizontal" />
+    
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_upload_photo"
+        android:visibility="gone" />
     
     <Button
         android:id="@+id/btnPickPhoto"
@@ -36,8 +45,10 @@
     
     <ProgressBar
         android:id="@+id/progress"
+        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:visibility="gone" />
 
 </LinearLayout>

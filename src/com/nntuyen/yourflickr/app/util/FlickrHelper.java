@@ -1,9 +1,16 @@
 package com.nntuyen.yourflickr.app.util;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.content.Intent;
@@ -145,27 +152,29 @@ public final class FlickrHelper {
 		}
 	}
 	
-	/*public void uploadPhoto(Context context, String photoPath) {
+	public void uploadPhoto(Context context, String photoPath) {
 		try {
-			HttpPost httpPost = new HttpPost(new URI(UPLOAD_URL));
+			String token = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_TOKEN);
+			HttpPost httpPost = new HttpPost(new URI(FlickrApiConst.UPLOAD_URL));
 			List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 			pairs.add(new BasicNameValuePair("photo", photoPath));
-			pairs.add(new BasicNameValuePair(API_KEY_PARAM, API_KEY));
-			pairs.add(new BasicNameValuePair(AUTH_TOKEN_PARAM, 
-					Common.getDataFromSharedPreferences(context, FlickrHelper.GET_TOKEN_VALUE)));
-			pairs.add(new BasicNameValuePair(API_SIG_PARAM, getApiSigKey(API_KEY_PARAM,
-					API_KEY, AUTH_TOKEN_PARAM, 
-					Common.getDataFromSharedPreferences(context, FlickrHelper.GET_TOKEN_VALUE))));
+			pairs.add(new BasicNameValuePair(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY));
+			pairs.add(new BasicNameValuePair(FlickrApiConst.AUTH_TOKEN_PARAM, token));
+			pairs.add(new BasicNameValuePair(FlickrApiConst.API_SIG_PARAM, 
+					getApiSigKey(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY, 
+							     FlickrApiConst.AUTH_TOKEN_PARAM, token)));
+			
 			try {
 				httpPost.setEntity(new UrlEncodedFormEntity(pairs));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			RestAPITask task = new RestAPITask(context, UPLOAD_PHOTO_CALLBACK);
+			
+			RestAPITask task = new RestAPITask(context, BroadcastCallbackConst.UPLOAD_PHOTO_CALLBACK);
 			task.execute(httpPost);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 }

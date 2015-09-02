@@ -24,11 +24,11 @@ public class FlickrAuthActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flickr_auth);
+		getActionBar().hide();
 		
 		browser = (WebView)findViewById(R.id.browser);
-		browser.setWebViewClient(new MyBrowser());
+		browser.setWebViewClient(new FlickrBrowser());
 		browser.loadUrl(getUrl());
-		//browser.loadUrl("http://flickr.com/services/auth/?api_key=59aadc28a0947a7bbea6794425dd4195&perms=write&frob=72157655707607893-7406d4c7efe10313-957545&api_sig=5b0d4e40b4519e8ad93531548aaf6408");
 	}
 	
 	private String getUrl() {
@@ -62,7 +62,7 @@ public class FlickrAuthActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private class MyBrowser extends WebViewClient {
+	private class FlickrBrowser extends WebViewClient {
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			view.loadUrl(url);

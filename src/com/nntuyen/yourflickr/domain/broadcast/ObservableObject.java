@@ -7,6 +7,8 @@ import com.nntuyen.yourflickr.domain.model.Photo;
 
 public class ObservableObject extends Observable {
 
+	private boolean isAuthenticated;
+	private String username;
 	private String value;
 	private List<Photo> photos;
 
@@ -38,5 +40,21 @@ public class ObservableObject extends Observable {
 
 	public void setPhotos(List<Photo> photos) {
 		this.photos = photos;
+	}
+
+	public boolean isAuthenticated() {
+		return isAuthenticated;
+	}
+
+	public void setAuthenticated(boolean isAuthenticated) {
+		this.isAuthenticated = isAuthenticated;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }

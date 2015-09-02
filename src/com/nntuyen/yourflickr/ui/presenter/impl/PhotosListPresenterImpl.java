@@ -43,7 +43,7 @@ public class PhotosListPresenterImpl implements PhotosListPresenter, Observer {
 	}
 
 	@Override
-	public void onResume() {
+	public void onGetPhotosList() {
 		String userId = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_USER_ID);
 		
 		if (userId != null && !userId.isEmpty()) {

@@ -43,6 +43,8 @@ public class GetTokenReceiver extends BroadcastReceiver {
 					Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_USER_ID, userId);
 					Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_USERNAME, username);
 					Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_FULLNAME, fullname);
+					ObservableObject.getInstance().setAuthenticated(true);
+					ObservableObject.getInstance().setUsername(username);
 				} else {
 					msg = FlickrApiConst.GET_TOKEN_FAIL_MSG;
 				}

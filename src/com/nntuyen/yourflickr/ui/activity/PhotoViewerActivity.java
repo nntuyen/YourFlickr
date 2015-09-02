@@ -20,6 +20,7 @@ public class PhotoViewerActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photo_viewer);
+		getActionBar().hide();
 		
 		ivPhoto = (TouchImageView)findViewById(R.id.ivTouchPhoto);
 		imageLoader = new ImageLoader(this);
