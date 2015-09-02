@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Your Flickr</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_photos_list">PhotosListActivity</string>
+    <string name="title_activity_photo_viewer">PhotoViewerActivity</string>
+    <string name="title_activity_photo_uploader">PhotoUploaderActivity</string>
+    <string name="button_pick_photo">Pick a photo</string>
+    <string name="button_use_camera">Use Camera</string>
+    <string name="button_navigate_gallery">Go to gallery</string>
+    <string name="button_login">Login</string>
+    <string name="title_activity_flickr_auth">FlickrAuthActivity</string>
+
+</resources>
