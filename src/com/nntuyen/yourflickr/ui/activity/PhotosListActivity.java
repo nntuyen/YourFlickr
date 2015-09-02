@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
 import com.nntuyen.yourflickr.domain.model.Photo;
-import com.nntuyen.yourflickr.ui.adapter.GridViewPhotoAdapter;
 import com.nntuyen.yourflickr.ui.adapter.PhotosListAdapter;
 import com.nntuyen.yourflickr.ui.presenter.PhotosListPresenter;
 import com.nntuyen.yourflickr.ui.presenter.impl.PhotosListPresenterImpl;
@@ -25,12 +24,11 @@ import com.nntuyen.yourflickr.ui.view.PhotosListView;
 public class PhotosListActivity extends Activity implements OnItemClickListener, PhotosListView {
 	
 	private static final String TAG = "PhotosListActivity";
+	
 	private PhotosListPresenter presenter;
-	//private GridView gvPhotos;
-	private GridViewPhotoAdapter gvPhotoAdapter;
 	private RecyclerView recyclerView;
-	LinearLayoutManager llm;
-	PhotosListAdapter plAdapter;
+	private LinearLayoutManager llm;
+	private PhotosListAdapter plAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

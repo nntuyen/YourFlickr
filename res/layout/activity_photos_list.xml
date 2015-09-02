@@ -5,17 +5,9 @@
     android:orientation="vertical"
     tools:context="com.nntuyen.yourflickr.ui.activity.PhotosListActivity" >
 
-    <!-- <GridView
-        android:id="@+id/gvPhotos"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth" >
-    </GridView> -->
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
