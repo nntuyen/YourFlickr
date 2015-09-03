@@ -79,6 +79,7 @@ public class FlickrAuthActivity extends Activity {
 				Intent intent = new Intent(FlickrAuthActivity.this, PhotoUploaderActivity.class);
 				intent.putExtra(KeyValueConst.AUTH_INTENT_MSG, FlickrApiConst.AUTH_SUCCESS_MSG);
 				startActivity(intent);
+				finish();
 			}
 		}
 	}

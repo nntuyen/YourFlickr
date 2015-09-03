@@ -34,13 +34,13 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_photo_uploader);
-		
-		presenter = new PhotoUploaderPresenterImpl(this, this);
-		presenter.onCreated();
+		setContentView(R.layout.activity_photo_uploader);		
 		
 		initButton();
 		progressBar = (ProgressBar)findViewById(R.id.progress);
+		
+		presenter = new PhotoUploaderPresenterImpl(this, this);
+		presenter.onCreated();
 	}
 	
 	private void initButton() {
