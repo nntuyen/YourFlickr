@@ -18,7 +18,9 @@ import com.nntuyen.yourflickr.domain.broadcast.GetFrobReceiver;
 import com.nntuyen.yourflickr.domain.broadcast.GetTokenReceiver;
 import com.nntuyen.yourflickr.domain.broadcast.ObservableObject;
 import com.nntuyen.yourflickr.domain.interactor.LoginInteractor;
+import com.nntuyen.yourflickr.domain.interactor.PhotoPickerInteractor;
 import com.nntuyen.yourflickr.domain.interactor.impl.LoginInteractorImpl;
+import com.nntuyen.yourflickr.domain.interactor.impl.PhotoPickerInteractorImpl;
 import com.nntuyen.yourflickr.ui.listener.OnLoginFinishedListener;
 import com.nntuyen.yourflickr.ui.presenter.PhotoUploaderPresenter;
 import com.nntuyen.yourflickr.ui.view.PhotoUploaderView;
@@ -30,6 +32,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 	private Context context;
 	private PhotoUploaderView photoUploaderView;
 	private LoginInteractor loginInteractor;
+	private PhotoPickerInteractor photoPickerInteractor;
 	private GetFrobReceiver getFrobReceiver;
 	private GetTokenReceiver getTokenReceiver;
 	private ObservableObject observableObject = ObservableObject.getInstance();
@@ -38,6 +41,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		this.context = context;
 		this.photoUploaderView = photoUploaderView;
 		this.loginInteractor = new LoginInteractorImpl();
+		this.photoPickerInteractor = new PhotoPickerInteractorImpl();
 		this.getFrobReceiver = new GetFrobReceiver();
 		this.getTokenReceiver = new GetTokenReceiver();
 	}
@@ -134,4 +138,13 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		}
 	}
 
+	@Override
+	public void pickPhoto(boolean fromDevice) {
+		if (fromDevice) {
+			photoPickerInteractor.fromDevice(context);
+		} else {
+			// From camera
+		}
+	}
+	
 }
