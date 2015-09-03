@@ -12,4 +12,5 @@ public interface PhotoUploaderView {
     public void changeLoginButtonText(String text);
     public void disableButtons();
     public void enableButtons();
+    public void setPreviewPhoto(String photoPath);
 }

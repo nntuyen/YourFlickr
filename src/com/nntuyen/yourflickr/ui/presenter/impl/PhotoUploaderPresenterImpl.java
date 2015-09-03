@@ -3,7 +3,9 @@ package com.nntuyen.yourflickr.ui.presenter.impl;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.util.Log;
 import com.nntuyen.yourflickr.app.constant.BroadcastCallbackConst;
 import com.nntuyen.yourflickr.app.constant.FlickrApiConst;
 import com.nntuyen.yourflickr.app.constant.KeyValueConst;
+import com.nntuyen.yourflickr.app.constant.RequestCodeConst;
 import com.nntuyen.yourflickr.app.util.Common;
 import com.nntuyen.yourflickr.app.util.FlickrHelper;
 import com.nntuyen.yourflickr.domain.broadcast.GetFrobReceiver;
@@ -42,7 +45,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		this.context = context;
 		this.photoUploaderView = photoUploaderView;
 		this.loginInteractor = new LoginInteractorImpl();
-		this.photoPickerInteractor = new PhotoPickerInteractorImpl();
+		this.photoPickerInteractor = new PhotoPickerInteractorImpl(context);
 		this.getFrobReceiver = new GetFrobReceiver();
 		this.getTokenReceiver = new GetTokenReceiver();
 		this.uploadPhotoReceiver = new UploadPhotoReceiver();
@@ -149,11 +152,11 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 	}
 
 	@Override
-	public void pickPhoto(boolean fromDevice) {
-		if (fromDevice) {
-			photoPickerInteractor.fromDevice(context);
+	public void pickPhoto(int requestCode) {
+		if (requestCode == RequestCodeConst.PICK_PHOTO) {
+			photoPickerInteractor.fromDevice();
 		} else {
-			// From camera
+			photoPickerInteractor.fromCamera();
 		}
 	}
 
@@ -161,6 +164,21 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 	public void uploadPhoto(String photoPath) {
 		photoUploaderView.showProgress();
 		FlickrHelper.getInstance().uploadPhoto(context, photoPath);
+	}
+
+	@Override
+	public String onPhotoPickerResult(int requestCode, int resultCode, Intent data) {
+		String photoPath = "";
+		
+		if (requestCode == RequestCodeConst.PICK_PHOTO && data != null && resultCode == Activity.RESULT_OK) {
+			photoPath = photoPickerInteractor.onResultFromDevice(requestCode, resultCode, data);
+		} else {
+			photoPath = photoPickerInteractor.onResultFromCamera(requestCode, resultCode, data);
+		}
+		
+		photoUploaderView.setPreviewPhoto(photoPath);
+		
+		return photoPath;
 	}
 	
 }

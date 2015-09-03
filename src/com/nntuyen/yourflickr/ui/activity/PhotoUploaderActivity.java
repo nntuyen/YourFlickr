@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
+import com.nntuyen.yourflickr.app.constant.RequestCodeConst;
 import com.nntuyen.yourflickr.app.util.Common;
 import com.nntuyen.yourflickr.domain.broadcast.ObservableObject;
 import com.nntuyen.yourflickr.ui.presenter.PhotoUploaderPresenter;
@@ -34,10 +35,9 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	
 	private Button btnUpload, btnLogin, btnPickPhoto, btnUseCamera, btnGoToGallery;
 	private ProgressBar progressBar;
-	private ImageView imgView;
+	private ImageView ivPreview;
 	
-	private static int RESULT_LOAD_IMG = 1;
-	private String imgDecodableString = "";
+	private String photoPath = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		
 		initButton();
 		progressBar = (ProgressBar)findViewById(R.id.progress);
-		imgView = (ImageView) findViewById(R.id.ivPreview);
+		ivPreview = (ImageView) findViewById(R.id.ivPreview);
 		
 		presenter = new PhotoUploaderPresenterImpl(this, this);
 		presenter.onCreated();
@@ -97,26 +97,20 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		
-		try {
-            // When an Image is picked
-            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK
-                    && null != data) {
-                // Get the Image from data
- 
+		photoPath = presenter.onPhotoPickerResult(requestCode, resultCode, data);
+		Toast.makeText(this, photoPath, Toast.LENGTH_LONG).show();
+		/*try {
+            if (requestCode == RequestCodeConst.PICK_PHOTO && resultCode == RESULT_OK && data != null) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
- 
-                // Get the cursor
                 Cursor cursor = getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
-                // Move to first row
                 cursor.moveToFirst();
  
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 imgDecodableString = cursor.getString(columnIndex);
                 cursor.close();
                 
-                // Set the Image in ImageView after decoding the String
                 imgView.setImageBitmap(BitmapFactory
                         .decodeFile(imgDecodableString));
                 
@@ -124,12 +118,11 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
                         Toast.LENGTH_LONG).show();
                 enableUploadButton();
             } else {
-                //Toast.makeText(this, "You haven't picked photo", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "You haven't picked photo", Toast.LENGTH_LONG).show();
             }
             
             // Camera
-            if (requestCode == 0 && resultCode == RESULT_OK
-                    && null != data) {
+            if (requestCode == RequestCodeConst.CAPTURE_PHOTO && resultCode == RESULT_OK && data != null) {
             	Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             	imgView.setImageBitmap(bitmap);
             	
@@ -149,7 +142,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
         } catch (Exception e) {
             Toast.makeText(this, "Error on picking photo", Toast.LENGTH_LONG)
                     .show();
-        }
+        }*/
 	}
 
 	@Override
@@ -186,17 +179,18 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		switch (v.getId()) {
 		case R.id.btnUpload:
 			//FlickrHelper.getInstance().uploadPhoto(this, imgDecodableString);
-			presenter.uploadPhoto(imgDecodableString);
+			presenter.uploadPhoto(photoPath);
 			break;
 		case R.id.btnLogin:
 			presenter.login();
 			break;
 		case R.id.btnPickPhoto:
-			presenter.pickPhoto(true);
+			presenter.pickPhoto(RequestCodeConst.PICK_PHOTO);
 			break;
 		case R.id.btnUseCamera:
-			Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, 0);
+			//Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			//startActivityForResult(intent, RequestCodeConst.CAPTURE_PHOTO);
+			presenter.pickPhoto(RequestCodeConst.CAPTURE_PHOTO);
 			break;
 		case R.id.btnGoToGallery:
 			navigateToGallery();
@@ -237,5 +231,10 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		btnUseCamera.setEnabled(true);
 		btnPickPhoto.setEnabled(true);
 		btnGoToGallery.setEnabled(true);
+	}
+
+	@Override
+	public void setPreviewPhoto(String photoPath) {
+		ivPreview.setImageBitmap(BitmapFactory.decodeFile(photoPath));
 	}
 }

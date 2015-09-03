@@ -33,6 +33,7 @@ public class FlickrApiConst {
 	public static final String FROB_PARAM = "frob";
 	public static final String USER_ID_PARAM = "user_id";
 	
+	// Used for format return json
 	public static final String FLICKR_CALLBACK = "jsonFlickrApi";
 	
 	// Messages
