@@ -116,7 +116,8 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
                         .decodeFile(imgDecodableString));
                 
                 Toast.makeText(this, imgDecodableString,
-                        Toast.LENGTH_LONG).show(); 
+                        Toast.LENGTH_LONG).show();
+                showUploadButton();
             } else {
                 Toast.makeText(this, "You haven't picked photo",
                         Toast.LENGTH_LONG).show();
