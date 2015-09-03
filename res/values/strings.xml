@@ -4,6 +4,7 @@
     <string name="app_name">Your Flickr</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_upload">Upload photo</string>
     <string name="title_activity_photos_list">Gallery</string>
     <string name="title_activity_photo_viewer">Photo viewer</string>
     <string name="title_activity_photo_uploader">Photo Uploader</string>

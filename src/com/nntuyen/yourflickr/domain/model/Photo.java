@@ -63,7 +63,7 @@ public class Photo {
 	
 	@Override
 	public String toString() {
-		return "http://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + ".jpg";
+		return "http://farm" + farm + ".static.flickr.com/" + server + "/" + id + "_" + secret + "_b.jpg";
 	}
 	
 }
