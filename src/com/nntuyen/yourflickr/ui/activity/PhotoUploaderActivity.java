@@ -90,50 +90,6 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		photoPath = presenter.onPhotoPickerResult(requestCode, resultCode, data);
-		/*try {
-            if (requestCode == RequestCodeConst.PICK_PHOTO && resultCode == RESULT_OK && data != null) {
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                Cursor cursor = getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
-                cursor.moveToFirst();
- 
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-                
-                imgView.setImageBitmap(BitmapFactory
-                        .decodeFile(imgDecodableString));
-                
-                Toast.makeText(this, imgDecodableString,
-                        Toast.LENGTH_LONG).show();
-                enableUploadButton();
-            } else {
-                Toast.makeText(this, "You haven't picked photo", Toast.LENGTH_LONG).show();
-            }
-            
-            // Camera
-            if (requestCode == RequestCodeConst.CAPTURE_PHOTO && resultCode == RESULT_OK && data != null) {
-            	Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            	imgView.setImageBitmap(bitmap);
-            	
-            	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            	bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                String path = Images.Media.insertImage(this.getContentResolver(), bitmap, Common.generatePhotoName(), null);
-                Uri tempUri = Uri.parse(path);
-                
-                Cursor cursor = getContentResolver().query(tempUri, null, null, null, null); 
-                cursor.moveToFirst(); 
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA); 
-                imgDecodableString = cursor.getString(idx); 
-                
-                Log.d("CAMERA", imgDecodableString);
-                Toast.makeText(this, imgDecodableString, Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Error on picking photo", Toast.LENGTH_LONG)
-                    .show();
-        }*/
 	}
 
 	@Override
@@ -169,7 +125,6 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnUpload:
-			//FlickrHelper.getInstance().uploadPhoto(this, imgDecodableString);
 			presenter.uploadPhoto(photoPath);
 			break;
 		case R.id.btnLogin:
@@ -179,8 +134,6 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 			presenter.pickPhoto(RequestCodeConst.PICK_PHOTO);
 			break;
 		case R.id.btnUseCamera:
-			//Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-			//startActivityForResult(intent, RequestCodeConst.CAPTURE_PHOTO);
 			presenter.pickPhoto(RequestCodeConst.CAPTURE_PHOTO);
 			break;
 		case R.id.btnGoToGallery:
