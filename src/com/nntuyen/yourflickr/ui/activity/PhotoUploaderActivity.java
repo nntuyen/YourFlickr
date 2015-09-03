@@ -2,6 +2,7 @@ package com.nntuyen.yourflickr.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
+import com.nntuyen.yourflickr.app.constant.BroadcastCallbackConst;
 import com.nntuyen.yourflickr.app.util.FlickrHelper;
+import com.nntuyen.yourflickr.domain.broadcast.UploadPhotoReceiver;
 import com.nntuyen.yourflickr.ui.presenter.PhotoUploaderPresenter;
 import com.nntuyen.yourflickr.ui.presenter.impl.PhotoUploaderPresenterImpl;
 import com.nntuyen.yourflickr.ui.view.PhotoUploaderView;
@@ -60,12 +63,14 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		btnUseCamera.setOnClickListener(this);
 		btnGoToGallery.setOnClickListener(this);
 	}
-	
+	UploadPhotoReceiver uploadPhoto = new UploadPhotoReceiver();
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
 		presenter.registerReceiver();
+		registerReceiver(uploadPhoto, 
+				new IntentFilter(BroadcastCallbackConst.UPLOAD_PHOTO_CALLBACK));
 		presenter.onResume(getIntent().getExtras());
 	}
 
