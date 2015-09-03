@@ -47,8 +47,6 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
-		
 	}
 
 	@Override
@@ -65,6 +63,7 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_upload) {
+			onBackPressed();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -37,6 +37,7 @@ public class PhotosListPresenterImpl implements PhotosListPresenter, Observer {
 	
 	@Override
 	public void registerReceiver() {
+		observableObject.deleteObservers();
 		observableObject.addObserver(this);
 		context.registerReceiver(getPhotosListReceiver, 
 				new IntentFilter(BroadcastCallbackConst.GET_PHOTOS_CALLBACK));

@@ -53,6 +53,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 	
 	@Override
 	public void registerReceiver() {
+		observableObject.deleteObservers();
 		observableObject.addObserver(this);
 		context.registerReceiver(getFrobReceiver, 
 				new IntentFilter(BroadcastCallbackConst.GET_FROB_CALLBACK));
@@ -100,23 +101,16 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		String msg = observableObject.getValue();
 		Log.d(TAG, msg);
 		
-		if (msg.equalsIgnoreCase(FlickrApiConst.GET_FROB_SUCCESS_MSG)) {
-			
-		} else if (msg.equalsIgnoreCase(FlickrApiConst.GET_TOKEN_SUCCESS_MSG)) {
+		if (msg.equalsIgnoreCase(FlickrApiConst.GET_TOKEN_SUCCESS_MSG)) {
 			photoUploaderView.showUser(ObservableObject.getInstance().getUsername());
-			photoUploaderView.hideProgress();
-			photoUploaderView.enableButtons();
 			photoUploaderView.changeLoginButtonText("Log out");
 			photoUploaderView.showMessage("Login successfully");
 		} else {
 			photoUploaderView.showMessage(msg);
 		}
 		
-		if (msg.equalsIgnoreCase(FlickrApiConst.UPLOAD_PHOTO_FAIL_MSG) ||
-			msg.equalsIgnoreCase(FlickrApiConst.UPLOAD_PHOTO_SUCCESS_MSG)) {
-			photoUploaderView.hideProgress();
-			photoUploaderView.enableUploadButton();
-		}
+		photoUploaderView.hideProgress();
+		photoUploaderView.enableButtons();
 	}
 
 	@Override
