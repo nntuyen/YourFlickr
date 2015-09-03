@@ -140,7 +140,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	
 	@Override
 	public void showUser(String username) {
-		getActionBar().setTitle("Welcome " + username);
+		getActionBar().setTitle(username);
 	}
 
 	@Override
@@ -185,5 +185,23 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	@Override
 	public void changeLoginButtonText(String text) {
 		btnLogin.setText(text);
+	}
+
+	@Override
+	public void disableButtons() {
+		btnUpload.setEnabled(false);
+		btnLogin.setEnabled(false);
+		btnUseCamera.setEnabled(false);
+		btnPickPhoto.setEnabled(false);
+		btnGoToGallery.setEnabled(false);
+	}
+
+	@Override
+	public void enableButtons() {
+		btnUpload.setEnabled(true);
+		btnLogin.setEnabled(true);
+		btnUseCamera.setEnabled(true);
+		btnPickPhoto.setEnabled(true);
+		btnGoToGallery.setEnabled(true);
 	}
 }

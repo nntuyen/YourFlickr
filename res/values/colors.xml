@@ -2,6 +2,7 @@
   <color name="primary">#2196F3</color>
   <color name="primary_dark">#1976D2</color>
   <color name="primary_light">#BBDEFB</color>
+  <color name="button_disabled">#E1BEE7</color>
   <color name="accent">#E040FB</color>
   <color name="accent_opacity">#50E040FB</color>
   <color name="primary_text">#212121</color>

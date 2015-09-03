@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/activity_padding"
     tools:context="com.nntuyen.yourflickr.ui.activity.PhotoUploaderActivity" >
 
     <ImageView
@@ -14,7 +15,7 @@
     
     <Button
         android:id="@+id/btnUpload"
-        android:layout_width="@dimen/button_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_upload_photo"
         android:visibility="gone"
@@ -25,7 +26,7 @@
     
     <Button
         android:id="@+id/btnPickPhoto"
-        android:layout_width="@dimen/button_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_pick_photo"
         android:background="@drawable/button_selector"
@@ -35,7 +36,7 @@
     
     <Button
         android:id="@+id/btnUseCamera"
-        android:layout_width="@dimen/button_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_use_camera"
         android:background="@drawable/button_selector"
@@ -45,7 +46,7 @@
     
     <Button
         android:id="@+id/btnGoToGallery"
-        android:layout_width="@dimen/button_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_navigate_gallery"
         android:background="@drawable/button_selector"
@@ -55,7 +56,7 @@
     
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="@dimen/button_width"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_login"
         android:background="@drawable/button_selector"

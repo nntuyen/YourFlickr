@@ -10,4 +10,6 @@ public interface PhotoUploaderView {
     public void showUploadButton();
     public void hideUploadButton();
     public void changeLoginButtonText(String text);
+    public void disableButtons();
+    public void enableButtons();
 }

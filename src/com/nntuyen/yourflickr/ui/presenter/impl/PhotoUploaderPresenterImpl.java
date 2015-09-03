@@ -66,7 +66,22 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 	@Override
 	public void login() {
 		Log.d(TAG, "Login from presenter");
-		loginInteractor.login(context, this);
+		
+		if (!ObservableObject.getInstance().isAuthenticated()) {
+			loginInteractor.login(context, this);
+			photoUploaderView.showProgress();
+			photoUploaderView.disableButtons();
+		} else {
+			Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_TOKEN, "");
+			Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_USER_ID, "");
+			Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_USERNAME, "");
+			Common.saveDataToSharedPreferences(context, KeyValueConst.FLICKR_FULLNAME, "");
+			ObservableObject.getInstance().setAuthenticated(false);
+			ObservableObject.getInstance().setUsername("");
+			
+			photoUploaderView.showUser("Your Flickr");
+			photoUploaderView.changeLoginButtonText("Login");
+		}
 	}
 
 	@Override
@@ -79,6 +94,8 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		} else if (msg.equalsIgnoreCase(FlickrApiConst.GET_TOKEN_SUCCESS_MSG)) {
 			photoUploaderView.showUser(ObservableObject.getInstance().getUsername());
 			photoUploaderView.hideProgress();
+			photoUploaderView.enableButtons();
+			photoUploaderView.changeLoginButtonText("Log out");
 			
 			Toast.makeText(context, "Login successfully", Toast.LENGTH_LONG).show();
 		} else {
@@ -92,6 +109,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 			String msg = bundle.getString(KeyValueConst.AUTH_INTENT_MSG);
 			
 			if (msg.equalsIgnoreCase(FlickrApiConst.AUTH_SUCCESS_MSG)) {
+				photoUploaderView.disableButtons();
 				photoUploaderView.showProgress();
 				FlickrHelper.getInstance().getToken(context);
 			}
