@@ -1,16 +1,14 @@
 package com.nntuyen.yourflickr.app.util;
 
-import java.io.UnsupportedEncodingException;
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import android.content.Context;
 import android.content.Intent;
@@ -156,10 +154,18 @@ public final class FlickrHelper {
 		try {
 			String token = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_TOKEN);
 			HttpPost httpPost = new HttpPost(new URI(FlickrApiConst.UPLOAD_URL));
+			File file = new File(photoPath);
 			
-			httpPost.setHeader("Content-Type", "multipart/form-data; boundary=--eriksboundry--");
+			MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+			entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+	        entityBuilder.addBinaryBody("photo", file);
+	        entityBuilder.addTextBody(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY);
+	        entityBuilder.addTextBody(FlickrApiConst.AUTH_TOKEN_PARAM, token);
+	        entityBuilder.addTextBody(FlickrApiConst.API_SIG_PARAM, 
+	        		getApiSigKey(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY, 
+						     FlickrApiConst.AUTH_TOKEN_PARAM, token));
 			
-			List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+			/*List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 			pairs.add(new BasicNameValuePair("photo", photoPath));
 			pairs.add(new BasicNameValuePair(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY));
 			pairs.add(new BasicNameValuePair(FlickrApiConst.AUTH_TOKEN_PARAM, token));
@@ -171,8 +177,10 @@ public final class FlickrHelper {
 				httpPost.setEntity(new UrlEncodedFormEntity(pairs));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-			}
-			
+			}*/
+	        
+	        HttpEntity entity = entityBuilder.build();
+	        httpPost.setEntity(entity);
 			RestAPITask task = new RestAPITask(context, BroadcastCallbackConst.UPLOAD_PHOTO_CALLBACK);
 			task.execute(httpPost);
 		} catch (URISyntaxException e) {

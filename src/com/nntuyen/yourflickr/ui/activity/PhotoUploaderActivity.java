@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
+import com.nntuyen.yourflickr.app.util.FlickrHelper;
 import com.nntuyen.yourflickr.ui.presenter.PhotoUploaderPresenter;
 import com.nntuyen.yourflickr.ui.presenter.impl.PhotoUploaderPresenterImpl;
 import com.nntuyen.yourflickr.ui.view.PhotoUploaderView;
@@ -153,6 +154,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnUpload:
+			FlickrHelper.getInstance().uploadPhoto(this, imgDecodableString);
 			break;
 		case R.id.btnLogin:
 			presenter.login();
