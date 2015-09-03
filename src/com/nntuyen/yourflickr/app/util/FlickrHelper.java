@@ -156,6 +156,9 @@ public final class FlickrHelper {
 		try {
 			String token = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_TOKEN);
 			HttpPost httpPost = new HttpPost(new URI(FlickrApiConst.UPLOAD_URL));
+			
+			httpPost.setHeader("Content-Type", "multipart/form-data; boundary=--eriksboundry--");
+			
 			List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 			pairs.add(new BasicNameValuePair("photo", photoPath));
 			pairs.add(new BasicNameValuePair(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY));
