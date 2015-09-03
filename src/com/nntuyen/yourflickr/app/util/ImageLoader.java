@@ -73,7 +73,7 @@ public class ImageLoader {
 			conn.setInstanceFollowRedirects(true);
 			InputStream is = conn.getInputStream();
 			OutputStream os = new FileOutputStream(f);
-			Common.CopyStream(is, os);
+			Common.copyStream(is, os);
 			os.close();
 			bitmap = decodeFile(f);
 			return bitmap;

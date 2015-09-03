@@ -13,6 +13,7 @@ public class FlickrApiConst {
 	public static final String AUTH_PATH = "https://www.flickr.com/services/auth/"; // Use for getting back to previous activity
 	public static final String UPLOAD_URL = "https://up.flickr.com/services/upload/";
 	
+	public static final String PHOTO_PARAM = "photo";
 	public static final String METHOD_PARAM = "method";
 	public static final String GET_FROB_METHOD_VALUE = "flickr.auth.getFrob";
 	public static final String GET_TOKEN_METHOD_VALUE = "flickr.auth.getToken";
@@ -45,4 +46,6 @@ public class FlickrApiConst {
 	public static final String CHECK_TOKEN_FAIL_MSG = "Check token fail";
 	public static final String GET_PHOTOS_SUCCESS_MSG = "Get photos successfully";
 	public static final String GET_PHOTOS_FAIL_MSG = "Get photos fail";
+	public static final String UPLOAD_PHOTO_SUCCESS_MSG = "Upload photo successfully";
+	public static final String UPLOAD_PHOTO_FAIL_MSG = "Upload photo fail";
 }

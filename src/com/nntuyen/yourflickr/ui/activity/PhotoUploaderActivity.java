@@ -1,14 +1,17 @@
 package com.nntuyen.yourflickr.ui.activity;
 
+import java.io.ByteArrayOutputStream;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
-import com.nntuyen.yourflickr.app.constant.BroadcastCallbackConst;
-import com.nntuyen.yourflickr.app.util.FlickrHelper;
-import com.nntuyen.yourflickr.domain.broadcast.UploadPhotoReceiver;
+import com.nntuyen.yourflickr.app.util.Common;
+import com.nntuyen.yourflickr.domain.broadcast.ObservableObject;
 import com.nntuyen.yourflickr.ui.presenter.PhotoUploaderPresenter;
 import com.nntuyen.yourflickr.ui.presenter.impl.PhotoUploaderPresenterImpl;
 import com.nntuyen.yourflickr.ui.view.PhotoUploaderView;
@@ -63,14 +65,12 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		btnUseCamera.setOnClickListener(this);
 		btnGoToGallery.setOnClickListener(this);
 	}
-	UploadPhotoReceiver uploadPhoto = new UploadPhotoReceiver();
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
 		presenter.registerReceiver();
-		registerReceiver(uploadPhoto, 
-				new IntentFilter(BroadcastCallbackConst.UPLOAD_PHOTO_CALLBACK));
 		presenter.onResume(getIntent().getExtras());
 	}
 
@@ -122,17 +122,29 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
                 
                 Toast.makeText(this, imgDecodableString,
                         Toast.LENGTH_LONG).show();
-                showUploadButton();
+                enableUploadButton();
             } else {
-                Toast.makeText(this, "You haven't picked photo",
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "You haven't picked photo", Toast.LENGTH_LONG).show();
             }
             
             // Camera
             if (requestCode == 0 && resultCode == RESULT_OK
                     && null != data) {
-            	Bitmap bp = (Bitmap) data.getExtras().get("data");
-            	imgView.setImageBitmap(bp);
+            	Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            	imgView.setImageBitmap(bitmap);
+            	
+            	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            	bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                String path = Images.Media.insertImage(this.getContentResolver(), bitmap, Common.generatePhotoName(), null);
+                Uri tempUri = Uri.parse(path);
+                
+                Cursor cursor = getContentResolver().query(tempUri, null, null, null, null); 
+                cursor.moveToFirst(); 
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA); 
+                imgDecodableString = cursor.getString(idx); 
+                
+                Log.d("CAMERA", imgDecodableString);
+                Toast.makeText(this, imgDecodableString, Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Toast.makeText(this, "Error on picking photo", Toast.LENGTH_LONG)
@@ -162,23 +174,24 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 
 	@Override
 	public void navigateToGallery() {
-		startActivity(new Intent(this, PhotosListActivity.class));
-        finish();
+		if (ObservableObject.getInstance().isAuthenticated()) {
+			startActivity(new Intent(this, PhotosListActivity.class));
+		} else {
+			Toast.makeText(this, "Please login to access your gallery", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnUpload:
-			FlickrHelper.getInstance().uploadPhoto(this, imgDecodableString);
+			//FlickrHelper.getInstance().uploadPhoto(this, imgDecodableString);
+			presenter.uploadPhoto(imgDecodableString);
 			break;
 		case R.id.btnLogin:
 			presenter.login();
 			break;
 		case R.id.btnPickPhoto:
-			/*Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-	                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-	        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);*/
 			presenter.pickPhoto(true);
 			break;
 		case R.id.btnUseCamera:
@@ -194,13 +207,13 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	}
 
 	@Override
-	public void showUploadButton() {
-		btnUpload.setVisibility(View.VISIBLE);		
+	public void enableUploadButton() {
+		btnUpload.setEnabled(true);		
 	}
 
 	@Override
-	public void hideUploadButton() {
-		btnUpload.setVisibility(View.GONE);
+	public void disableUploadButton() {
+		btnUpload.setEnabled(false);
 	}
 
 	@Override

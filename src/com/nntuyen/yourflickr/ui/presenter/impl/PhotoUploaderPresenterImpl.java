@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.nntuyen.yourflickr.app.constant.BroadcastCallbackConst;
 import com.nntuyen.yourflickr.app.constant.FlickrApiConst;
@@ -17,6 +16,7 @@ import com.nntuyen.yourflickr.app.util.FlickrHelper;
 import com.nntuyen.yourflickr.domain.broadcast.GetFrobReceiver;
 import com.nntuyen.yourflickr.domain.broadcast.GetTokenReceiver;
 import com.nntuyen.yourflickr.domain.broadcast.ObservableObject;
+import com.nntuyen.yourflickr.domain.broadcast.UploadPhotoReceiver;
 import com.nntuyen.yourflickr.domain.interactor.LoginInteractor;
 import com.nntuyen.yourflickr.domain.interactor.PhotoPickerInteractor;
 import com.nntuyen.yourflickr.domain.interactor.impl.LoginInteractorImpl;
@@ -35,6 +35,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 	private PhotoPickerInteractor photoPickerInteractor;
 	private GetFrobReceiver getFrobReceiver;
 	private GetTokenReceiver getTokenReceiver;
+	private UploadPhotoReceiver uploadPhotoReceiver;
 	private ObservableObject observableObject = ObservableObject.getInstance();
 	
 	public PhotoUploaderPresenterImpl(Context context, PhotoUploaderView photoUploaderView) {
@@ -44,6 +45,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		this.photoPickerInteractor = new PhotoPickerInteractorImpl();
 		this.getFrobReceiver = new GetFrobReceiver();
 		this.getTokenReceiver = new GetTokenReceiver();
+		this.uploadPhotoReceiver = new UploadPhotoReceiver();
 	}
 	
 	@Override
@@ -53,6 +55,8 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 				new IntentFilter(BroadcastCallbackConst.GET_FROB_CALLBACK));
 		context.registerReceiver(getTokenReceiver, 
 				new IntentFilter(BroadcastCallbackConst.GET_TOKEN_CALLBACK));
+		context.registerReceiver(uploadPhotoReceiver, 
+				new IntentFilter(BroadcastCallbackConst.UPLOAD_PHOTO_CALLBACK));
 	}
 
 	@Override
@@ -101,9 +105,15 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 			photoUploaderView.enableButtons();
 			photoUploaderView.changeLoginButtonText("Log out");
 			
-			Toast.makeText(context, "Login successfully", Toast.LENGTH_LONG).show();
+			photoUploaderView.showMessage("Login successfully");
 		} else {
 			photoUploaderView.showMessage(msg);
+		}
+		
+		if (msg.equalsIgnoreCase(FlickrApiConst.UPLOAD_PHOTO_FAIL_MSG) ||
+			msg.equalsIgnoreCase(FlickrApiConst.UPLOAD_PHOTO_SUCCESS_MSG)) {
+			photoUploaderView.hideProgress();
+			photoUploaderView.enableUploadButton();
 		}
 	}
 
@@ -145,6 +155,12 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		} else {
 			// From camera
 		}
+	}
+
+	@Override
+	public void uploadPhoto(String photoPath) {
+		photoUploaderView.showProgress();
+		FlickrHelper.getInstance().uploadPhoto(context, photoPath);
 	}
 	
 }

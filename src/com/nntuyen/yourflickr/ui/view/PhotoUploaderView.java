@@ -7,8 +7,8 @@ public interface PhotoUploaderView {
     public void hideProgress();
     public void showMessage(String msg);
     public void navigateToGallery();
-    public void showUploadButton();
-    public void hideUploadButton();
+    public void enableUploadButton();
+    public void disableUploadButton();
     public void changeLoginButtonText(String text);
     public void disableButtons();
     public void enableButtons();

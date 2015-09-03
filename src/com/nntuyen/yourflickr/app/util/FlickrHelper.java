@@ -160,44 +160,19 @@ public final class FlickrHelper {
 			FileBody fileBody = new FileBody(file);
 			
 			MultipartEntity multiPart = new MultipartEntity((HttpMultipartMode.BROWSER_COMPATIBLE));
-			multiPart.addPart("photo", fileBody);
+			multiPart.addPart(FlickrApiConst.PHOTO_PARAM, fileBody);
 			multiPart.addPart(FlickrApiConst.API_KEY_PARAM, new StringBody(FlickrApiConst.API_KEY));
 			multiPart.addPart(FlickrApiConst.AUTH_TOKEN_PARAM, new StringBody(token));
 			multiPart.addPart(FlickrApiConst.API_SIG_PARAM, 
 	        		new StringBody(getApiSigKey(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY, 
 						     FlickrApiConst.AUTH_TOKEN_PARAM, token)));
 			
-			/*MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-			entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-	        entityBuilder.addBinaryBody("photo", file);
-	        entityBuilder.addTextBody(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY);
-	        entityBuilder.addTextBody(FlickrApiConst.AUTH_TOKEN_PARAM, token);
-	        entityBuilder.addTextBody(FlickrApiConst.API_SIG_PARAM, 
-	        		getApiSigKey(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY, 
-						     FlickrApiConst.AUTH_TOKEN_PARAM, token));
-			
-			List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-			pairs.add(new BasicNameValuePair("photo", photoPath));
-			pairs.add(new BasicNameValuePair(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY));
-			pairs.add(new BasicNameValuePair(FlickrApiConst.AUTH_TOKEN_PARAM, token));
-			pairs.add(new BasicNameValuePair(FlickrApiConst.API_SIG_PARAM, 
-					getApiSigKey(FlickrApiConst.API_KEY_PARAM, FlickrApiConst.API_KEY, 
-							     FlickrApiConst.AUTH_TOKEN_PARAM, token)));
-			
-			try {
-				httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}*/
-	        
-	        //HttpEntity entity = entityBuilder.build();
 	        httpPost.setEntity(multiPart);
 			RestAPITask task = new RestAPITask(context, BroadcastCallbackConst.UPLOAD_PHOTO_CALLBACK);
 			task.execute(httpPost);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

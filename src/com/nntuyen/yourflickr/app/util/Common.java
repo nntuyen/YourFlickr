@@ -3,6 +3,7 @@ package com.nntuyen.yourflickr.app.util;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
+import java.util.Calendar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -55,7 +56,7 @@ public class Common {
 	    return value;
 	}
 	
-	public static void CopyStream(InputStream is, OutputStream os) {
+	public static void copyStream(InputStream is, OutputStream os) {
         final int buffer_size=1024;
         
         try {
@@ -72,4 +73,16 @@ public class Common {
         	ex.printStackTrace();
         }
     }
+	
+	public static String generatePhotoName() {
+		Calendar c = Calendar.getInstance();
+		String year = String.valueOf(c.get(Calendar.YEAR));
+		String month = String.valueOf(c.get(Calendar.MONTH));
+		String day = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+		String hour = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+		String minute = String.valueOf(c.get(Calendar.MINUTE));
+		String second = String.valueOf(c.get(Calendar.SECOND));
+		
+		return "YourFlick_" + year + month + day + hour + minute + second;
+	}
 }

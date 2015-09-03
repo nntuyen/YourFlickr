@@ -9,4 +9,5 @@ public interface PhotoUploaderPresenter {
 	public void onResume(Bundle bundle);
 	public void onCreated();
 	public void pickPhoto(boolean fromDevice); // true for from device, false for from camera
+	public void uploadPhoto(String photoPath);
 }

@@ -1,12 +1,12 @@
 package com.nntuyen.yourflickr.domain.broadcast;
 
-import com.nntuyen.yourflickr.domain.task.RestAPITask;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.nntuyen.yourflickr.app.constant.FlickrApiConst;
+import com.nntuyen.yourflickr.domain.task.RestAPITask;
 
 public class UploadPhotoReceiver extends BroadcastReceiver {
 	
@@ -15,8 +15,14 @@ public class UploadPhotoReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String response = intent.getStringExtra(RestAPITask.HTTP_RESPONSE);
-		Toast.makeText(context, response, Toast.LENGTH_LONG).show();
-		Log.d(TAG, response);
+		String msg = FlickrApiConst.UPLOAD_PHOTO_SUCCESS_MSG;
+		
+		if (!response.contains("ok")) {
+			msg = FlickrApiConst.UPLOAD_PHOTO_FAIL_MSG;
+		}
+		
+		Log.d(TAG, "Send " + msg + " to presenter");
+		ObservableObject.getInstance().updateValue(msg);
 	}
 
 }
