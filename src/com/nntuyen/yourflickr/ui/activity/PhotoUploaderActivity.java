@@ -1,17 +1,9 @@
 package com.nntuyen.yourflickr.ui.activity;
 
-import java.io.ByteArrayOutputStream;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +15,6 @@ import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
 import com.nntuyen.yourflickr.app.constant.RequestCodeConst;
-import com.nntuyen.yourflickr.app.util.Common;
 import com.nntuyen.yourflickr.domain.broadcast.ObservableObject;
 import com.nntuyen.yourflickr.ui.presenter.PhotoUploaderPresenter;
 import com.nntuyen.yourflickr.ui.presenter.impl.PhotoUploaderPresenterImpl;
@@ -50,6 +41,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		
 		presenter = new PhotoUploaderPresenterImpl(this, this);
 		presenter.onCreated();
+		presenter.registerReceiver();
 	}
 	
 	private void initButton() {
@@ -70,7 +62,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	protected void onResume() {
 		super.onResume();
 		
-		presenter.registerReceiver();
+		
 		presenter.onResume(getIntent().getExtras());
 	}
 
@@ -98,7 +90,6 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		super.onActivityResult(requestCode, resultCode, data);
 		
 		photoPath = presenter.onPhotoPickerResult(requestCode, resultCode, data);
-		Toast.makeText(this, photoPath, Toast.LENGTH_LONG).show();
 		/*try {
             if (requestCode == RequestCodeConst.PICK_PHOTO && resultCode == RESULT_OK && data != null) {
                 Uri selectedImage = data.getData();
@@ -170,7 +161,7 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 		if (ObservableObject.getInstance().isAuthenticated()) {
 			startActivity(new Intent(this, PhotosListActivity.class));
 		} else {
-			Toast.makeText(this, "Please login to access your gallery", Toast.LENGTH_SHORT).show();
+			showMessage("Please login to access your gallery");
 		}
 	}
 

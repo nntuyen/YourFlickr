@@ -41,14 +41,14 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 		
 		presenter = new PhotosListPresenterImpl(this, this);
 		presenter.onGetPhotosList();
-		
+		presenter.registerReceiver();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		presenter.registerReceiver();
+		
 	}
 
 	@Override

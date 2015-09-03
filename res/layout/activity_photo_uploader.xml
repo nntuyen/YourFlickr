@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_upload_photo"
-        android:enabled="false"
         android:background="@drawable/button_selector"
         android:textColor="@color/icons"
         android:layout_marginBottom="@dimen/button_margin_bottom"

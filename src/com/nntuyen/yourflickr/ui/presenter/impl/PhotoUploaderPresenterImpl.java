@@ -107,7 +107,6 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 			photoUploaderView.hideProgress();
 			photoUploaderView.enableButtons();
 			photoUploaderView.changeLoginButtonText("Log out");
-			
 			photoUploaderView.showMessage("Login successfully");
 		} else {
 			photoUploaderView.showMessage(msg);
@@ -125,7 +124,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 		if (bundle != null) {
 			String msg = bundle.getString(KeyValueConst.AUTH_INTENT_MSG);
 			
-			if (msg.equalsIgnoreCase(FlickrApiConst.AUTH_SUCCESS_MSG)) {
+			if (msg.equalsIgnoreCase(FlickrApiConst.AUTH_SUCCESS_MSG) && !observableObject.isAuthenticated()) {
 				photoUploaderView.disableButtons();
 				photoUploaderView.showProgress();
 				FlickrHelper.getInstance().getToken(context);
@@ -162,8 +161,14 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 
 	@Override
 	public void uploadPhoto(String photoPath) {
-		photoUploaderView.showProgress();
-		FlickrHelper.getInstance().uploadPhoto(context, photoPath);
+		if (photoPath == null || photoPath.isEmpty()) {
+			photoUploaderView.showMessage("Please pick a photo");
+		} else if (!observableObject.isAuthenticated()) {
+			photoUploaderView.showMessage("Please login");
+		} else {
+			photoUploaderView.showProgress();
+			FlickrHelper.getInstance().uploadPhoto(context, photoPath);
+		}
 	}
 
 	@Override
