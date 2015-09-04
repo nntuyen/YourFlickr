@@ -12,6 +12,7 @@ import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -64,9 +65,9 @@ public final class FlickrHelper {
 		Intent intent = new Intent(context, FlickrAuthActivity.class);
 		intent.putExtra(KeyValueConst.FULL_AUTH_URL, url);
 		context.startActivity(intent);
+		((Activity)context).finish();
 	}
 	
-	// Not including api_sig in params
 	private String buildUrlParams(String url, String... params) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(url);

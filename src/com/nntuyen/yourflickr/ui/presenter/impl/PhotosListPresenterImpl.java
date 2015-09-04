@@ -48,6 +48,7 @@ public class PhotosListPresenterImpl implements PhotosListPresenter, Observer {
 		String userId = Common.getDataFromSharedPreferences(context, KeyValueConst.FLICKR_USER_ID);
 		
 		if (userId != null && !userId.isEmpty()) {
+			photosListView.showProgress();
 			FlickrHelper.getInstance().getPhotosList(context);
 		}
 	}
@@ -62,6 +63,8 @@ public class PhotosListPresenterImpl implements PhotosListPresenter, Observer {
 		} else {
 			photosListView.showMessage(msg);
 		}
+		
+		photosListView.hideProgress();
 	}
 
 	@Override

@@ -15,13 +15,11 @@ public class TouchImageView extends ImageView {
 
 	Matrix matrix;
 
-	// We can be in one of these 3 states
 	static final int NONE = 0;
 	static final int DRAG = 1;
 	static final int ZOOM = 2;
 	int mode = NONE;
 
-	// Remember some things for zooming
 	PointF last = new PointF();
 	PointF start = new PointF();
 	float minScale = 1f;
@@ -50,6 +48,7 @@ public class TouchImageView extends ImageView {
 
 	private void sharedConstructing(Context context) {
 		super.setClickable(true);
+		
 		this.context = context;
 		mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 		matrix = new Matrix();
@@ -69,8 +68,8 @@ public class TouchImageView extends ImageView {
 					last.set(curr);
 					start.set(last);
 					mode = DRAG;
+					
 					break;
-
 				case MotionEvent.ACTION_MOVE:
 					if (mode == DRAG) {
 						float deltaX = curr.x - last.x;
@@ -83,24 +82,28 @@ public class TouchImageView extends ImageView {
 						fixTrans();
 						last.set(curr.x, curr.y);
 					}
+					
 					break;
-
 				case MotionEvent.ACTION_UP:
 					mode = NONE;
 					int xDiff = (int) Math.abs(curr.x - start.x);
 					int yDiff = (int) Math.abs(curr.y - start.y);
-					if (xDiff < CLICK && yDiff < CLICK)
+					
+					if (xDiff < CLICK && yDiff < CLICK) {
 						performClick();
+					}
+					
 					break;
-
 				case MotionEvent.ACTION_POINTER_UP:
 					mode = NONE;
+					
 					break;
 				}
 
 				setImageMatrix(matrix);
 				invalidate();
-				return true; // indicate event was handled
+				
+				return true;
 			}
 
 		});
@@ -123,6 +126,7 @@ public class TouchImageView extends ImageView {
 			float mScaleFactor = detector.getScaleFactor();
 			float origScale = saveScale;
 			saveScale *= mScaleFactor;
+			
 			if (saveScale > maxScale) {
 				saveScale = maxScale;
 				mScaleFactor = maxScale / origScale;
@@ -131,15 +135,14 @@ public class TouchImageView extends ImageView {
 				mScaleFactor = minScale / origScale;
 			}
 
-			if (origWidth * saveScale <= viewWidth
-					|| origHeight * saveScale <= viewHeight)
-				matrix.postScale(mScaleFactor, mScaleFactor, viewWidth / 2,
-						viewHeight / 2);
-			else
-				matrix.postScale(mScaleFactor, mScaleFactor,
-						detector.getFocusX(), detector.getFocusY());
+			if (origWidth * saveScale <= viewWidth || origHeight * saveScale <= viewHeight) {
+				matrix.postScale(mScaleFactor, mScaleFactor, viewWidth / 2, viewHeight / 2);
+			} else {
+				matrix.postScale(mScaleFactor, mScaleFactor, detector.getFocusX(), detector.getFocusY());
+			}
 
 			fixTrans();
+			
 			return true;
 		}
 	}
@@ -150,11 +153,11 @@ public class TouchImageView extends ImageView {
 		float transY = m[Matrix.MTRANS_Y];
 
 		float fixTransX = getFixTrans(transX, viewWidth, origWidth * saveScale);
-		float fixTransY = getFixTrans(transY, viewHeight, origHeight
-				* saveScale);
+		float fixTransY = getFixTrans(transY, viewHeight, origHeight * saveScale);
 
-		if (fixTransX != 0 || fixTransY != 0)
+		if (fixTransX != 0 || fixTransY != 0) {
 			matrix.postTranslate(fixTransX, fixTransY);
+		}
 	}
 
 	float getFixTrans(float trans, float viewSize, float contentSize) {
@@ -168,10 +171,13 @@ public class TouchImageView extends ImageView {
 			maxTrans = 0;
 		}
 
-		if (trans < minTrans)
+		if (trans < minTrans) {
 			return -trans + minTrans;
-		if (trans > maxTrans)
+		}
+		if (trans > maxTrans) {
 			return -trans + maxTrans;
+		}
+		
 		return 0;
 	}
 
@@ -179,6 +185,7 @@ public class TouchImageView extends ImageView {
 		if (contentSize <= viewSize) {
 			return 0;
 		}
+		
 		return delta;
 	}
 
@@ -188,12 +195,12 @@ public class TouchImageView extends ImageView {
 		viewWidth = MeasureSpec.getSize(widthMeasureSpec);
 		viewHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-		//
-		// Rescales image on rotation
-		//
-		if (oldMeasuredHeight == viewWidth && oldMeasuredHeight == viewHeight
-				|| viewWidth == 0 || viewHeight == 0)
+		if (oldMeasuredHeight == viewWidth && 
+			oldMeasuredHeight == viewHeight || 
+			viewWidth == 0 || viewHeight == 0) {
 			return;
+		}
+		
 		oldMeasuredHeight = viewHeight;
 		oldMeasuredWidth = viewWidth;
 
@@ -202,9 +209,12 @@ public class TouchImageView extends ImageView {
 			float scale;
 
 			Drawable drawable = getDrawable();
-			if (drawable == null || drawable.getIntrinsicWidth() == 0
-					|| drawable.getIntrinsicHeight() == 0)
+			if (drawable == null || 
+				drawable.getIntrinsicWidth() == 0 || 
+				drawable.getIntrinsicHeight() == 0) {
 				return;
+			}
+			
 			int bmWidth = drawable.getIntrinsicWidth();
 			int bmHeight = drawable.getIntrinsicHeight();
 
@@ -216,10 +226,8 @@ public class TouchImageView extends ImageView {
 			matrix.setScale(scale, scale);
 
 			// Center the image
-			float redundantYSpace = (float) viewHeight
-					- (scale * (float) bmHeight);
-			float redundantXSpace = (float) viewWidth
-					- (scale * (float) bmWidth);
+			float redundantYSpace = (float)viewHeight - (scale * (float) bmHeight);
+			float redundantXSpace = (float)viewWidth - (scale * (float) bmWidth);
 			redundantYSpace /= (float) 2;
 			redundantXSpace /= (float) 2;
 
@@ -229,6 +237,7 @@ public class TouchImageView extends ImageView {
 			origHeight = viewHeight - 2 * redundantYSpace;
 			setImageMatrix(matrix);
 		}
+		
 		fixTrans();
 	}
 

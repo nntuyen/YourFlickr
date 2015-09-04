@@ -123,6 +123,7 @@ public class PhotoUploaderPresenterImpl implements PhotoUploaderPresenter, OnLog
 				photoUploaderView.showProgress();
 				FlickrHelper.getInstance().getToken(context);
 			}
+			bundle.clear();
 		}
 		
 		if (ObservableObject.getInstance().isAuthenticated()) {

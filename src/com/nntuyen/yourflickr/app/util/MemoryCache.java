@@ -15,6 +15,7 @@ public class MemoryCache {
         if(!cache.containsKey(id)) {
             return null;
         }
+        
         SoftReference<Bitmap> ref = cache.get(id);
         
         return ref.get();

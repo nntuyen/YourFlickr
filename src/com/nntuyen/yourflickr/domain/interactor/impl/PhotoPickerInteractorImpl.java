@@ -36,18 +36,13 @@ public class PhotoPickerInteractorImpl implements PhotoPickerInteractor {
         String[] filePathColumn = { MediaStore.Images.Media.DATA };
         Cursor cursor = context.getContentResolver().query(selectedImage,
                 filePathColumn, null, null, null);
+        
         cursor.moveToFirst();
-
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String imgDecodableString = cursor.getString(columnIndex);
+        String photoPath = cursor.getString(columnIndex);
         cursor.close();
         
-        //imgView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-        
-        //Toast.makeText(this, imgDecodableString, Toast.LENGTH_LONG).show();
-        //enableUploadButton();
-        
-        return imgDecodableString;
+        return photoPath;
 	}
 
 	@Override
@@ -59,7 +54,6 @@ public class PhotoPickerInteractorImpl implements PhotoPickerInteractor {
 	@Override
 	public String onResultFromCamera(int requestCode, int resultCode, Intent data) {
 		Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-    	//imgView.setImageBitmap(bitmap); 
     	
     	ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     	bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -69,10 +63,10 @@ public class PhotoPickerInteractorImpl implements PhotoPickerInteractor {
         Cursor cursor = context.getContentResolver().query(tempUri, null, null, null, null); 
         cursor.moveToFirst(); 
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA); 
-        String imgDecodableString = cursor.getString(idx); 
-        return imgDecodableString;
-        //Log.d("CAMERA", imgDecodableString);
-        //Toast.makeText(this, imgDecodableString, Toast.LENGTH_LONG).show();
+        String photoPath = cursor.getString(idx);
+        cursor.close();
+        
+        return photoPath;
 	}
 
 }

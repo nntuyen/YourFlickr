@@ -21,7 +21,6 @@ public class Common {
 
 		byte byteData[] = md.digest();
 
-		// convert the byte to hex format method 1
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < byteData.length; i++) {
 			sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
@@ -42,7 +41,6 @@ public class Common {
 	    Editor editor;
 	    settings = context.getSharedPreferences(FLICKR_PREFS, Context.MODE_PRIVATE);
 	    editor = settings.edit();
-	 
 	    editor.putString(key, value);
 	    editor.commit();
 	}

@@ -62,7 +62,6 @@ public class PhotoUploaderActivity extends Activity implements PhotoUploaderView
 	protected void onResume() {
 		super.onResume();
 		
-		
 		presenter.onResume(getIntent().getExtras());
 	}
 

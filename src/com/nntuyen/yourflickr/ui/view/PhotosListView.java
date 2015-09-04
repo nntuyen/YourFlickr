@@ -8,4 +8,6 @@ public interface PhotosListView {
 
 	public void setPhotos(List<Photo> photos);
 	public void showMessage(String msg);
+	public void showProgress();
+	public void hideProgress();
 }

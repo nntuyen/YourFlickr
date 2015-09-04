@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nntuyen.yourflickr.R;
@@ -29,12 +30,14 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 	private RecyclerView recyclerView;
 	private GridLayoutManager gridLayoutManager;
 	private PhotosListAdapter plAdapter;
+	private ProgressBar progressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_photos_list);
 		
+		progressBar = (ProgressBar)findViewById(R.id.progress);
 		recyclerView = (RecyclerView)findViewById(R.id.rv);
 		gridLayoutManager = new GridLayoutManager(this, 2);
 		recyclerView.setLayoutManager(gridLayoutManager);
@@ -85,5 +88,15 @@ public class PhotosListActivity extends Activity implements OnItemClickListener,
 	@Override
 	public void showMessage(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void showProgress() {
+		progressBar.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void hideProgress() {
+		progressBar.setVisibility(View.GONE);
 	}
 }
